@@ -1,0 +1,357 @@
+/**
+ * @name Shyvana
+ * @author NighjtHunter
+ * @description
+ * @version 0.0.1
+ */
+
+/* ==========================================================================
+   INDICE
+   1. Variabili
+   2. Sfondo principale e trasparenze
+   3. Sidebar dei canali
+   4. Chat
+   5. Colonna laterale e lista membri
+   6. Chiamate vocali
+   7. Pannello utente (barra flottante in basso)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. VARIABILI
+   ========================================================================== */
+
+:root {
+  /* Immagini di sfondo */
+  --background-main: url("./imgs/background.jpg");
+  --background-sidebar: url("./imgs/sidebar.jpg");
+  --background-panel: url("./imgs/activity.jpg");
+
+  /* Sfondi composti: immagine + velo nero */
+  --background-main-var: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), var(--background-main) center / cover no-repeat !important;
+  --background-sidebar-var: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), var(--background-sidebar) !important;
+  /* Attualmente non usata */
+  --background-user-gradient-color: linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(0, 59, 22, 1) 50%, rgba(0, 133, 55, 1) 100%);
+
+  /* Bordi di Discord */
+  --border-subtle: #858585;
+  --border-normal: #858585;
+  --border-strong: #494949;
+  --app-frame-border: #858585;
+
+  /* Layout */
+  /* Spazio lasciato libero sopra la barra flottante del pannello utente */
+  --panel-offset: 20vh;
+  /* Spostamento orizzontale per centrare il pannello sulla chat */
+  --panel-shift: 44px;
+  /* Spazio tra l'ultimo messaggio e la casella di testo */
+  --chat-gap: 3vh;
+}
+
+
+/* ==========================================================================
+   2. SFONDO PRINCIPALE E TRASPARENZE
+   ========================================================================== */
+
+[class*="page_"] {
+  background: var(--background-main-var);
+}
+
+/* Tutto trasparente per far vedere lo sfondo.
+   Esclusi: overlayContainer_ e tile_ (chiamate), sprite_ (icona emoji,
+   che è un'immagine di sfondo) */
+[class*="page_"] main,
+[class*="page_"] [class*="content_"]:has(> main),
+[class*="page_"] div > div:not([class*="overlayContainer_"]):not([class*="tile_"]):not([class*="sprite_"]),
+[class*="subtitleContainer_"] > section > div > [class*="children_"]::after {
+  background: transparent !important;
+}
+
+[class*="sidebarList_"] nav > [class*="scroller_"],
+[class*="page_"] main > div,
+[class*="page_"] [class*="content_"] > aside div,
+[class*="nowPlayingColumn_"] {
+  background-color: transparent !important;
+}
+
+
+/* ==========================================================================
+   3. SIDEBAR DEI CANALI
+   ========================================================================== */
+
+[class*="sidebar_"] {
+  background-image: var(--background-sidebar-var);
+  background-size: cover !important;
+  background-position: -105vh !important;
+
+  /* Niente spazio riservato al pannello utente, che ora è flottante */
+  --custom-app-panels-height: 0px !important;
+}
+
+[class*="sidebar_"] nav {
+  background-color: transparent !important;
+}
+
+[class*="sidebar_"] [class*="sidebarList_"],
+[class*="sidebar_"] [class*="guilds_"] {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  height: 100% !important;
+}
+
+[class*="sidebarList_"] {
+  border-radius: 0;
+}
+
+/* Canali, DM, ricerca e intestazioni su fondo scuro */
+[class*="sidebarList_"] div:has(li) li > div,
+[class*="sidebarList_"] [class*="searchBar_"] > button,
+[class*="sidebarList_"] nav ul > li[class*="dm_"] > div > a,
+[class*="sidebarList_"] nav ul > h2 {
+  background-color: rgba(0,0,0,.6) !important;
+}
+
+[class*="sidebarList_"] nav ul > h2 {
+  padding: 2vh !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* --- Scrollbar sottile --- */
+[class*="sidebarList_"] [class*="scroller_"]::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+[class*="sidebarList_"] [class*="scroller_"]::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+[class*="sidebarList_"] [class*="scroller_"]::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,.3) !important;
+  border-radius: 8px !important;
+  border: none !important;
+}
+
+[class*="sidebarList_"] [class*="scroller_"]::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255,255,255,.5) !important;
+}
+
+
+/* ==========================================================================
+   4. CHAT
+   ========================================================================== */
+
+[class*="page_"] main section {
+  background-color: rgba(0,0,0,.4) !important;
+}
+
+[class*="subtitleContainer_"] > section,
+[class*="subtitleContainer_"] > section * {
+  background: transparent !important;
+}
+
+[class*="messagesWrapper_"] > [class*="chatGradient_"] {
+  display: none !important;
+}
+
+/* Fascia libera tra l'ultimo messaggio e la casella di testo */
+[class*="messagesWrapper_"] > [class*="scroller_"] {
+  margin-bottom: var(--chat-gap) !important;
+  border-bottom: var(--border-normal) 1px solid;
+}
+
+/* --- Casella di testo --- */
+[class*="page_"] [class*="content_"] > main > form > div > div,
+[class*="page_"] [class*="content_"] > main > form > div > div:focus-within,
+[class*="page_"] [class*="content_"] > main > form > div > div:hover {
+  background-color: rgba(0,0,0,.4) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Spazio sotto la casella per non finire coperta dal pannello utente */
+[class*="page_"] [class*="content_"] > main > form {
+  margin-bottom: var(--panel-offset) !important;
+}
+
+
+/* ==========================================================================
+   5. COLONNA LATERALE E LISTA MEMBRI
+   ========================================================================== */
+
+/* Deve stare dopo la sezione 2, che rende trasparenti gli stessi elementi */
+[class*="page_"] [class*="content_"] > aside > div {
+  background-color: rgba(0,0,0,.4) !important;
+}
+
+[class*="page_"] [class*="content_"]:has(> main) aside {
+  background-color: rgba(0,0,0,.4) !important;
+}
+
+[class*="page_"] [class*="content_"] > div > aside > div {
+  background-color: transparent !important;
+}
+
+/* --- "Ora in riproduzione" (pagina amici) --- */
+[class*="nowPlayingColumn_"] > aside > div {
+  background: rgba(0,0,0,.4);
+}
+
+/* --- Membri --- */
+[class*="member_"] {
+  background-color: rgba(0,0,0,.5) !important;
+  margin: .8vh 0;
+}
+
+/* Gradiente animato al passaggio del mouse (non su chi ha una nameplate) */
+[class*="member_"]:not(:has([class*="nameplated"])):hover {
+  background-image: linear-gradient(120deg, #000000, #0b3d3a, #031a1a, #0f6b66, #000000, #0a2f35, #000000) !important;
+  background-size: 400% 400% !important;
+  background-repeat: no-repeat !important;
+  animation: gradiente 9s ease-in-out infinite !important;
+}
+
+@keyframes gradiente {
+  0%   { background-position: 0% 0%; }
+  25%  { background-position: 100% 30%; }
+  50%  { background-position: 60% 100%; }
+  75%  { background-position: 0% 70%; }
+  100% { background-position: 0% 0%; }
+}
+
+
+/* ==========================================================================
+   6. CHIAMATE VOCALI
+   ========================================================================== */
+
+/* Tile degli utenti: sfondo scuro semitrasparente, statico */
+[class*="tile_"] {
+  background: rgba(0,0,0,.5) !important;
+  border: 1px solid rgba(15,107,102,.45);
+  border-radius: 20px;
+}
+
+/* Comandi della chiamata sopra il pannello utente */
+[class*="callContainer_"] {
+  margin-bottom: var(--panel-offset) !important;
+}
+
+
+/* ==========================================================================
+   7. PANNELLO UTENTE (BARRA FLOTTANTE IN BASSO)
+   ========================================================================== */
+
+/* --- Contenitore --- */
+section[class*="panels_"] {
+  background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), var(--background-panel) center / cover no-repeat !important;
+  background-color: black !important;
+  padding: 8px 14px !important;
+
+  /* Disposizione orizzontale */
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 10px;
+
+  /* Barra flottante centrata in basso */
+  position: fixed !important;
+  bottom: 16px !important;
+  /* Centro finestra spostato di --panel-shift per allinearsi alla chat
+     (l'anchor positioning in Discord non si aggancia) */
+  left: calc(50% + var(--panel-shift)) !important;
+  right: auto !important;
+  transform: translateX(-50%);
+  width: 100vh !important;
+  max-width: 90vw !important;
+  z-index: 100;
+  border-radius: 18px !important;
+  border: 1px solid rgba(15,107,102,.45) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6) !important;
+}
+
+/* --- Card interne (profilo, connessione vocale, attività) --- */
+section[class*="panels_"] > * {
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: 240px;
+  box-sizing: border-box;
+}
+
+/* Condivisione schermo / attività: va a capo, su una riga sua in fondo */
+section[class*="panels_"] > [class*="activityPanel_"],
+section[class*="panels_"] > :has([class*="activityPanel_"]),
+section[class*="panels_"] > [class*="stream" i],
+section[class*="panels_"] > :has([class*="stream" i]) {
+  order: 99;
+  flex-basis: 100% !important;
+}
+
+section[class*="panels_"] > [class*="container_"],
+section[class*="panels_"] [class*="connection_"],
+section[class*="panels_"] [class*="activityPanel_"] {
+  background: linear-gradient(135deg, rgb(1, 8, 0), rgba(11,61,58,1)) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+  border: 1px solid rgba(15,107,102,.45) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  margin: 0 !important;
+}
+
+section[class*="panels_"] > [class*="container_"] {
+  padding: 8px 14px !important;
+}
+
+/* --- Avatar e nome --- */
+section[class*="panels_"] [class*="avatarWrapper_"] {
+  border-radius: 10px !important;
+  padding: 2px 6px 2px 2px !important;
+  transition: background-color .2s ease;
+}
+
+section[class*="panels_"] [class*="avatarWrapper_"]:hover {
+  background-color: rgba(15,107,102,.35) !important;
+}
+
+section[class*="panels_"] [class*="avatarWrapper_"] [class*="avatar_"] {
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(15,107,102,.8), 0 0 10px rgba(15,107,102,.5);
+}
+
+section[class*="panels_"] [class*="nameTag_"] [class*="title_"] {
+  font-weight: 700;
+  color: #e6fffb !important;
+}
+
+section[class*="panels_"] [class*="nameTag_"] [class*="subtext_"] {
+  color: rgba(200,235,230,.65) !important;
+}
+
+/* --- Pulsanti muta / cuffie / impostazioni --- */
+section[class*="panels_"] [class*="buttons_"] {
+  gap: 4px;
+}
+
+section[class*="panels_"] [class*="buttons_"] button {
+  border-radius: 8px !important;
+  background-color: rgba(255,255,255,.04) !important;
+  transition: background-color .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+
+section[class*="panels_"] [class*="buttons_"] button:hover {
+  background-color: rgba(15,107,102,.5) !important;
+  box-shadow: 0 0 8px rgba(15,107,102,.6);
+  transform: translateY(-1px);
+}
+
+section[class*="panels_"] [class*="buttons_"] button:active {
+  transform: translateY(0);
+}
+
+/* Stato attivo (mutato / audio disattivato): rosso soft */
+section[class*="panels_"] [class*="buttons_"] button[aria-checked="true"],
+section[class*="panels_"] [class*="buttons_"] button:has([class*="strikethrough"]) {
+  background-color: rgba(237,66,69,.2) !important;
+  box-shadow: inset 0 0 0 1px rgba(237,66,69,.45);
+}
